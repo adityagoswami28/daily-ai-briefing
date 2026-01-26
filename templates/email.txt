@@ -1,0 +1,23 @@
+DAILY AI BRIEFING - {{ date }}
+{{ '=' * 50 }}
+
+{{ article_count }} articles curated from {{ source_count }} sources
+
+{% if summary %}
+TODAY'S HIGHLIGHTS
+------------------
+{{ summary }}
+
+{% endif %}
+{% for section in sections %}
+{{ section.title | upper }}
+{{ '-' * section.title|length }}
+{% for article in section.articles %}
+* {{ article.title }}
+  Source: {{ article.source_name }}{% if article.score %} | {{ article.score }} points{% endif %}
+  {{ article.url }}
+
+{% endfor %}
+{% endfor %}
+---
+Daily AI Briefing | Built with Claude Code
