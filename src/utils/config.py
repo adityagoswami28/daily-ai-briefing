@@ -32,7 +32,15 @@ class Config:
     include_rss: bool = True
     include_hackernews: bool = True
     include_arxiv: bool = True
+    include_github_trending: bool = True
     enable_ai_summary: bool = True
+
+    # Topic filtering
+    enable_topic_filtering: bool = False
+    filter_topics: List[str] = field(default_factory=list)
+
+    # GitHub settings
+    github_history_days: int = 30
 
     # Reddit subreddits
     subreddits: List[str] = field(default_factory=lambda: [
@@ -47,6 +55,10 @@ class Config:
     @classmethod
     def from_env(cls) -> "Config":
         """Load configuration from environment variables."""
+        # Parse topic filtering list from comma-separated string
+        topics_str = os.environ.get("FILTER_TOPICS", "")
+        filter_topics = [t.strip() for t in topics_str.split(",") if t.strip()]
+
         return cls(
             # Required
             gmail_user=os.environ["GMAIL_USER"],
@@ -67,7 +79,13 @@ class Config:
             include_rss=os.environ.get("INCLUDE_RSS", "true").lower() == "true",
             include_hackernews=os.environ.get("INCLUDE_HACKERNEWS", "true").lower() == "true",
             include_arxiv=os.environ.get("INCLUDE_ARXIV", "true").lower() == "true",
+            include_github_trending=os.environ.get("INCLUDE_GITHUB_TRENDING", "true").lower() == "true",
             enable_ai_summary=os.environ.get("ENABLE_AI_SUMMARY", "true").lower() == "true",
+            # Topic filtering
+            enable_topic_filtering=os.environ.get("ENABLE_TOPIC_FILTERING", "false").lower() == "true",
+            filter_topics=filter_topics,
+            # GitHub settings
+            github_history_days=int(os.environ.get("GITHUB_HISTORY_DAYS", "30")),
         )
 
     def validate(self) -> None:

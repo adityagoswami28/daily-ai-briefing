@@ -77,6 +77,16 @@ class ArxivCollector(BaseCollector):
         # Get primary category
         primary_cat = result.primary_category
 
+        # Extract category tags - handle both string and object types
+        tags = []
+        for cat in result.categories[:3]:
+            if isinstance(cat, str):
+                tags.append(cat)
+            elif hasattr(cat, 'term'):
+                tags.append(cat.term)
+            else:
+                tags.append(str(cat))
+
         return Article(
             id=f"arxiv_{result.entry_id.split('/')[-1]}",
             title=result.title.replace("\n", " "),
@@ -86,7 +96,7 @@ class ArxivCollector(BaseCollector):
             published_at=published,
             summary=self._truncate_summary(result.summary),
             author=self._format_authors(result.authors),
-            tags=[cat.term for cat in result.categories[:3]],
+            tags=tags,
         )
 
     def _truncate_summary(self, summary: str) -> str:

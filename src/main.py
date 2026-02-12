@@ -6,8 +6,9 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from src.utils import Config, setup_logging, get_logger
-from src.collectors import RSSCollector, HackerNewsCollector, RedditCollector, ArxivCollector
-from src.processors import Aggregator, Deduplicator, Ranker, Summarizer
+from src.utils.github_history import GitHubHistoryManager
+from src.collectors import RSSCollector, HackerNewsCollector, RedditCollector, ArxivCollector, GitHubTrendingCollector
+from src.processors import Aggregator, Deduplicator, Ranker, Summarizer, TopicFilter
 from src.email import EmailFormatter, GmailSender
 from config import RSS_FEEDS
 
@@ -57,6 +58,11 @@ def main():
             collectors.append(ArxivCollector())
             logger.info("ArXiv collector enabled")
 
+        if config.include_github_trending:
+            history_manager = GitHubHistoryManager()
+            collectors.append(GitHubTrendingCollector(history_manager=history_manager))
+            logger.info("GitHub Trending collector enabled")
+
         if not collectors:
             logger.error("No collectors enabled! Check your configuration.")
             sys.exit(1)
@@ -77,10 +83,19 @@ def main():
         unique_articles = deduplicator.deduplicate(all_articles)
         logger.info(f"After deduplication: {len(unique_articles)} articles")
 
+        # Topic filtering (if enabled)
+        if config.enable_topic_filtering and config.filter_topics:
+            logger.info(f"Topic filtering enabled with {len(config.filter_topics)} topics")
+            topic_filter = TopicFilter(config.filter_topics)
+            filtered_articles = topic_filter.filter(unique_articles)
+            logger.info(f"After topic filtering: {len(filtered_articles)} articles")
+        else:
+            filtered_articles = unique_articles
+
         # Rank articles
         logger.info("Ranking articles...")
         ranker = Ranker()
-        ranked_articles = ranker.rank(unique_articles)
+        ranked_articles = ranker.rank(filtered_articles)
 
         # Limit to max articles
         final_articles = ranked_articles[: config.max_articles]

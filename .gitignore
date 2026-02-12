@@ -58,3 +58,5 @@ htmlcov/
 # Temporary files
 .temp/
 tmp/
+SETUP_NOTES.md
+CLAUDE.md

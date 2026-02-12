@@ -3,6 +3,7 @@ from .rss import RSSCollector
 from .hackernews import HackerNewsCollector
 from .reddit import RedditCollector
 from .arxiv import ArxivCollector
+from .github_trending import GitHubTrendingCollector
 
 __all__ = [
     "BaseCollector",
@@ -10,4 +11,5 @@ __all__ = [
     "HackerNewsCollector",
     "RedditCollector",
     "ArxivCollector",
+    "GitHubTrendingCollector",
 ]
