@@ -60,3 +60,4 @@ htmlcov/
 tmp/
 SETUP_NOTES.md
 CLAUDE.md
+.claude/
