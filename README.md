@@ -377,7 +377,6 @@ daily_ai_briefing/
 ├── .env.example                 # Environment variables template
 ├── .gitignore                   # Git ignore rules
 ├── requirements.txt             # Python dependencies
-├── CLAUDE.md                    # Project documentation for Claude
 └── README.md                    # This file
 ```
 
