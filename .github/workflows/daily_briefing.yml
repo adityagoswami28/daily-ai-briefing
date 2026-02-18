@@ -45,7 +45,7 @@ jobs:
           # Settings
           TIMEZONE: 'America/New_York'
           MAX_ARTICLES: '40'
-          MAX_AGE_HOURS: '24'
+          MAX_AGE_HOURS: '72'
 
           # Feature flags
           INCLUDE_RSS: 'true'
