@@ -1,11 +1,12 @@
 name: Daily AI Briefing
 
 on:
-  schedule:
-    # 8:00 AM EST = 13:00 UTC (standard time)
-    # 8:00 AM EDT = 12:00 UTC (daylight saving)
-    # Using 13:00 UTC for EST - adjust if needed
-    - cron: '0 13 * * *'
+  # Scheduled run disabled - re-enable by uncommenting the block below
+  # schedule:
+  #   # 8:00 AM EST = 13:00 UTC (standard time)
+  #   # 8:00 AM EDT = 12:00 UTC (daylight saving)
+  #   # Using 13:00 UTC for EST - adjust if needed
+  #   - cron: '0 13 * * *'
 
   # Allow manual trigger for testing
   workflow_dispatch:
